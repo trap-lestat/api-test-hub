@@ -20,7 +20,7 @@ api-test-hub generate -c src/api_test_hub/data/example.yaml -o cases/test_genera
 
 ## 初始化模板项目（CLI）
 ```bash
-api-test-hub init -o ./api-test-template
+api-test-hub init -o ./projects/my_project
 ```
 
 ## CLI 帮助与示例
@@ -59,7 +59,7 @@ api-test-hub run -c src/api_test_hub/data/example.yaml
 
 ## 运行项目用例（CLI）
 ```bash
-api-test-hub run -p examples/project_sample --no-allure
+api-test-hub run -p projects/demo --no-allure
 ```
 
 ## 运行配置用例并生成 Allure HTML（默认）

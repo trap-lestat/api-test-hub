@@ -35,7 +35,7 @@ api-test-hub run -c src/api_test_hub/data/example.yaml --no-allure
 
 ## 4.1.1 按项目执行（文件夹为一个项目）
 ```bash
-api-test-hub run -p examples/project_sample
+api-test-hub run -p projects/demo
 ```
 
 项目配置示例（`project.yaml`）：
@@ -156,5 +156,5 @@ allure serve reports/allure-results
 
 ## 7. 初始化模板项目
 ```bash
-api-test-hub init -o ./api-test-template
+api-test-hub init -o ./projects/my_project
 ```
