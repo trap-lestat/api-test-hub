@@ -32,6 +32,7 @@ def test_generate_pytest_file(tmp_path) -> None:
     assert "context = {}" in content
     assert "perform_login" in content
     assert "auth=config.auth" in content
+    assert "dbs=config.db" in content
     assert "allure.dynamic.title" in content
     assert "_apply_allure_meta" in content
     assert str(config_path) in content
@@ -69,5 +70,6 @@ cases:
     assert "load_project" in content
     assert "perform_login" in content
     assert "auth=config.auth" in content
+    assert "dbs=config.db" in content
     assert "allure.dynamic.title" in content
     assert "_apply_allure_meta" in content

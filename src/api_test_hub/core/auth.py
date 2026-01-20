@@ -43,6 +43,11 @@ def apply_auth(case: CaseConfig, auth: Dict[str, Any] | None) -> CaseConfig:
         name=case.name,
         method=case.method,
         path=case.path,
+        case_id=case.case_id,
+        epic=case.epic,
+        feature=case.feature,
+        story=case.story,
+        severity=case.severity,
         params=case.params,
         headers=headers,
         json=case.json,
@@ -51,6 +56,7 @@ def apply_auth(case: CaseConfig, auth: Dict[str, Any] | None) -> CaseConfig:
         retries=case.retries,
         retry_delay=case.retry_delay,
         extract=case.extract,
+        validate_db=case.validate_db,
     )
 
 

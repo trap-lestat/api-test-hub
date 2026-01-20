@@ -55,4 +55,5 @@ def test_run_case_from_config(http_server: Tuple[str, HTTPServer], tmp_path) -> 
             context=context,
             variables=config.variables,
             auth=config.auth,
+            dbs=config.db,
         )

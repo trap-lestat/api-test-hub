@@ -11,6 +11,7 @@ pytest -q
 ```
 
 说明：Allure CLI 需单独安装（不支持通过 pip 安装）。本地安装完成后在虚拟环境内可直接使用 `allure` 命令。
+说明：MySQL/Postgres 驱动已加入默认依赖（`pymysql`, `psycopg2-binary`）。
 
 ## 安装命令行
 ```bash
@@ -60,6 +61,42 @@ api-test-hub run -c src/api_test_hub/data/example.yaml
 ## 运行项目用例（CLI）
 ```bash
 api-test-hub run -p projects/demo --no-allure
+```
+
+## 数据库校验（validate_db）
+在项目配置中声明数据库连接，在用例中通过 `validate_db` 执行 SQL 并断言：
+
+```yaml
+db:
+  default:
+    type: postgres
+    host: 127.0.0.1
+    port: 5432
+    user: demo
+    password: demo
+    database: demo_db
+```
+
+```yaml
+validate_db:
+  - name: user_count
+    datasource: default
+    sql: "select count(1) from users"
+    assert:
+      - eq: [body.value, 1]
+```
+
+也支持将查询结果缓存到上下文并参与断言：
+
+```yaml
+validate_db:
+  - name: latest_user
+    datasource: default
+    sql: "select username from users order by id desc limit 1"
+    extract:
+      db_user_name: value
+validate:
+  - eq: ["body.data.items[0].username", "${db_user_name}"]
 ```
 
 ## 运行配置用例并生成 Allure HTML（默认）

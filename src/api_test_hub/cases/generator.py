@@ -43,7 +43,7 @@ def _render_template(config_file: Path) -> str:
         "def test_api_cases(case):\n"
         "    allure.dynamic.title(case.name)\n"
         "    _apply_allure_meta(case)\n"
-        "    run_case(config.base_url, case, variables=config.variables, context=context, auth=config.auth)\n"
+        "    run_case(config.base_url, case, variables=config.variables, context=context, auth=config.auth, dbs=config.db)\n"
     )
 
 
@@ -67,7 +67,7 @@ def _render_project_template(project_dir: Path) -> str:
         "def test_api_cases(case):\n"
         "    allure.dynamic.title(case.name)\n"
         "    _apply_allure_meta(case)\n"
-        "    run_case(config.base_url, case, variables=config.variables, context=context, auth=config.auth)\n"
+        "    run_case(config.base_url, case, variables=config.variables, context=context, auth=config.auth, dbs=config.db)\n"
     )
 
 

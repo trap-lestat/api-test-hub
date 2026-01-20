@@ -55,6 +55,56 @@ cases:
     method: GET
     path: /hello
 ```
+
+## 2.3 数据库校验结构（示例）
+```yaml
+db:
+  default:
+    type: sqlite
+    path: /tmp/demo.db
+```
+
+```yaml
+db:
+  default:
+    type: mysql
+    host: 127.0.0.1
+    port: 3306
+    user: demo
+    password: demo
+    database: demo_db
+```
+
+```yaml
+db:
+  default:
+    type: postgres
+    host: 127.0.0.1
+    port: 5432
+    user: demo
+    password: demo
+    database: demo_db
+```
+
+```yaml
+validate_db:
+  - name: user_count
+    datasource: default
+    sql: "select count(1) from users"
+    assert:
+      - eq: [body.value, 1]
+```
+
+```yaml
+validate_db:
+  - name: latest_user
+    datasource: default
+    sql: "select username from users order by id desc limit 1"
+    extract:
+      db_user_name: value
+validate:
+  - eq: ["body.data.items[0].username", "${db_user_name}"]
+```
 ## 3. 运行流程
 1. 读取配置与环境变量
 2. 生成测试用例集合

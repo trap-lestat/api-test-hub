@@ -55,6 +55,7 @@ def test_extract_and_cache(http_server: Tuple[str, HTTPServer], tmp_path) -> Non
         context=context,
         variables=config.variables,
         auth=config.auth,
+        dbs=config.db,
     )
 
     assert context["user_id"] == 7
@@ -66,4 +67,5 @@ def test_extract_and_cache(http_server: Tuple[str, HTTPServer], tmp_path) -> Non
         context=context,
         variables=config.variables,
         auth=config.auth,
+        dbs=config.db,
     )

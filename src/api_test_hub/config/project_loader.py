@@ -42,6 +42,7 @@ def load_project(project_dir: str | Path) -> APISuiteConfig:
         cases=cases,
         variables=variables,
         auth=_ensure_dict(project_raw.get("auth")),
+        db=_ensure_dict(project_raw.get("db")),
     )
 
 

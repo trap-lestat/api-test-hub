@@ -11,11 +11,18 @@ cases:
     params:
       page: 1
       page_size: 10
+    validate_db:
+      - name: user_count
+        datasource: default
+        sql: "select username from users order by id desc limit 1"
+        extract:
+          db_user_name: value
     validate:
       - eq: [status_code, 200]
       - eq: [body.code, 0]
       - eq: [body.message, "ok"]
       - eq: ["body.data.items[0].username", "${user_name}"]
+      - eq: ["body.data.items[0].username", "${db_user_name}"]
 
 
 

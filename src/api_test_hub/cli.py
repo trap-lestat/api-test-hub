@@ -90,6 +90,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                     variables=config.variables,
                     context=context,
                     auth=config.auth,
+                    dbs=config.db,
                 )
         except Exception as exc:
             print(f"run failed: {exc}", file=sys.stderr)

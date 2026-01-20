@@ -21,6 +21,7 @@ def test_mock_example_sample_config(monkeypatch) -> None:
                 variables=config.variables,
                 context=context,
                 auth=config.auth,
+                dbs=config.db,
             )
         assert context["user_id"] == 42
         assert context["user_name"] == "lei"

@@ -1,2 +1,4 @@
 requests
 pyyaml
+pymysql
+psycopg2-binary

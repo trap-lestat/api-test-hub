@@ -38,6 +38,7 @@ def test_validate_interpolates_variables(tmp_path) -> None:
             variables=config.variables,
             context=context,
             auth=config.auth,
+            dbs=config.db,
         )
     finally:
         stop_mock_server(server)

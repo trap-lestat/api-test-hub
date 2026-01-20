@@ -139,6 +139,64 @@ cases:
     path: /api/v1/users
 ```
 
+## 4.6 数据库校验（方案 A）
+在项目配置里定义数据库连接，在用例中增加 `validate_db`：
+
+```yaml
+db:
+  default:
+    type: sqlite
+    path: /tmp/demo.db
+```
+
+MySQL / Postgres 示例：
+```yaml
+db:
+  default:
+    type: mysql
+    host: 127.0.0.1
+    port: 3306
+    user: demo
+    password: demo
+    database: demo_db
+```
+
+```yaml
+db:
+  default:
+    type: postgres
+    host: 127.0.0.1
+    port: 5432
+    user: demo
+    password: demo
+    database: demo_db
+```
+
+```yaml
+validate_db:
+  - name: user_count
+    datasource: default
+    sql: "select count(1) from users"
+    assert:
+      - eq: [body.value, 1]
+```
+
+也可以把查询结果缓存到上下文，供后续断言使用：
+```yaml
+validate_db:
+  - name: latest_user
+    datasource: default
+    sql: "select username from users order by id desc limit 1"
+    extract:
+      db_user_name: value
+validate:
+  - eq: ["body.data.items[0].username", "${db_user_name}"]
+```
+
+支持的 `extract` 字段：
+- `value`: 使用第一行第一列
+- `rows`: 使用完整结果集（列表）
+
 ## 5. 生成 pytest 用例文件
 ```bash
 api-test-hub generate -c src/api_test_hub/data/example.yaml -o cases/test_generated.py

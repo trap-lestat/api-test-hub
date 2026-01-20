@@ -7,6 +7,7 @@ from typing import Any, Dict, Optional
 from api_test_hub.config.models import CaseConfig
 from api_test_hub.core.assertions import AssertionErrorDetail, assert_response
 from api_test_hub.core.auth import apply_auth
+from api_test_hub.core.db import run_db_checks
 from api_test_hub.core.extract import extract_values
 from api_test_hub.core.request import RequestClient, ResponseData
 from api_test_hub.utils.vars import interpolate
@@ -20,6 +21,7 @@ def run_case(
     variables: Optional[Dict[str, Any]] = None,
     context: Optional[Dict[str, Any]] = None,
     auth: Optional[Dict[str, Any]] = None,
+    dbs: Optional[Dict[str, Any]] = None,
 ) -> ResponseData:
     runtime_vars: Dict[str, Any] = {}
     if variables:
@@ -73,6 +75,15 @@ def run_case(
             )
 
         try:
+            if dbs and runtime_case.validate_db:
+                _attach_allure_db(runtime_case.validate_db)
+                run_db_checks(dbs, runtime_case.validate_db, context=context)
+                runtime_vars = {}
+                if variables:
+                    runtime_vars.update(variables)
+                if context:
+                    runtime_vars.update(context)
+                runtime_case = _interpolate_case(case, runtime_vars, context)
             _attach_allure_validate(runtime_case.validate)
             assert_response(response, runtime_case.validate)
             if context is not None and runtime_case.extract:
@@ -106,6 +117,7 @@ def _interpolate_case(
         retries=case.retries,
         retry_delay=case.retry_delay,
         extract=case.extract,
+        validate_db=case.validate_db,
     )
 
 
@@ -146,6 +158,10 @@ def _attach_allure_validate(validations: Any) -> None:
 
 def _attach_allure_validate_result(message: str) -> None:
     _allure_attach("validate_result", {"status": "failed", "message": message})
+
+
+def _attach_allure_db(checks: Any) -> None:
+    _allure_attach("validate_db", checks)
 
 
 def _allure_attach(name: str, content: Any) -> None:

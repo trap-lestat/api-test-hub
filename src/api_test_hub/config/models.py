@@ -22,6 +22,7 @@ class CaseConfig:
     retries: int = 0
     retry_delay: float = 0.0
     extract: Dict[str, Any] = field(default_factory=dict)
+    validate_db: List[Dict[str, Any]] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -32,3 +33,4 @@ class APISuiteConfig:
     cases: List[CaseConfig]
     variables: Dict[str, Any] = field(default_factory=dict)
     auth: Dict[str, Any] = field(default_factory=dict)
+    db: Dict[str, Any] = field(default_factory=dict)

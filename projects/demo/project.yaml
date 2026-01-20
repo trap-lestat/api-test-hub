@@ -19,4 +19,12 @@ auth:
       refresh_token: body.data.refresh_token
       user_id: body.data.user.id
       user_name: body.data.user.username
-      
+# 数据库配置
+db:
+  default:
+    type: postgres
+    host: 127.0.0.1
+    port: 5432
+    user: postgres
+    password: postgres
+    database: bench_hub

@@ -33,6 +33,7 @@ def load_config(path: str | Path) -> APISuiteConfig:
         cases=cases,
         variables=variables,
         auth=_ensure_dict(interpolated.get("auth")),
+        db=_ensure_dict(interpolated.get("db")),
     )
 
 
@@ -100,6 +101,7 @@ def _build_case(case: Dict[str, Any]) -> CaseConfig:
         retries=_ensure_int(case.get("retries", 0)),
         retry_delay=_ensure_float(case.get("retry_delay", 0.0)),
         extract=_ensure_dict(case.get("extract")),
+        validate_db=_ensure_list(case.get("validate_db")),
     )
 
 
