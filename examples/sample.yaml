@@ -1,0 +1,44 @@
+version: 1
+name: sample_suite
+base_url: https://api.example.com
+variables:
+  user_id: 42
+cases:
+  - name: get_user
+    method: GET
+    path: /users/${user_id}
+    params:
+      verbose: true                    # GET 查询参数
+    retries: 1
+    retry_delay: 0.2
+    extract:
+      cached_id: body.id
+      cached_body: body
+    validate:
+      - eq: [status_code, 200]          # 相等断言
+      - eq: [body.id, 42]               # 相等断言
+      - contains: [body.name, "lei"]    # 包含断言（字符串）
+      - not_eq: [body.name, "tom"]      # 不相等断言
+      - gt: [body.age, 18]              # 大于断言
+      - gte: [body.score, 60]           # 大于等于断言
+      - lt: [body.rank, 100]            # 小于断言
+      - lte: [body.rank, 100]           # 小于等于断言
+      - in: [body.tags, "vip"]          # 成员包含（列表）
+      - not_in: [body.tags, "blocked"]  # 成员不包含（列表）
+      - exists: [body.id]               # 字段存在
+      - regex: [body.name, "^l"]        # 正则匹配
+  - name: get_user_detail
+    method: GET
+    path: /users/${cached_id}/detail    # 使用上一个接口缓存的字段作为参数
+    params:
+      include: profile                 # GET 查询参数示例
+    validate:
+      - eq: [status_code, 200]          # 校验详情接口返回正常
+  - name: update_user
+    method: POST
+    path: /users/${cached_id}
+    json:                              # POST JSON body 示例
+      nickname: lei
+      level: 3
+    validate:
+      - eq: [status_code, 200]          # 校验更新接口返回正常

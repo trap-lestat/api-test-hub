@@ -1,0 +1,14 @@
+.DS_Store
+*.DS_Store
+.venv/
+.pytest_cache/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+reports/
+htmlcov/
+.coverage
+.mypy_cache/
+cases/test_generated.py

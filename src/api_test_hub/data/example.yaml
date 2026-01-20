@@ -1,0 +1,15 @@
+version: 1
+name: user_api
+base_url: http://localhost:8080
+variables:
+  user_id: 42
+cases:
+  - name: health_check
+    method: GET
+    path: /health
+    params:
+      verbose: true
+    retries: 1
+    retry_delay: 0.1
+    validate:
+      - eq: [status_code, 200]

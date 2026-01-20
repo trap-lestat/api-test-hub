@@ -1,0 +1,22 @@
+version: 1
+name: mock_suite
+base_url: ${ENV:MOCK_BASE_URL}
+cases:
+  - name: get_user
+    method: GET
+    path: /users/42
+    extract:
+      user_id: body.id
+      user_name: body.name
+    validate:
+      - eq: [status_code, 200]
+      - eq: [body.id, 42]
+      - eq: [body.name, "lei"]
+  - name: post_submit
+    method: POST
+    path: /submit
+    json:
+      name: ${user_name}
+    validate:
+      - eq: [status_code, 201]
+      - eq: [body.received.name, "lei"]

@@ -1,0 +1,11 @@
+version: 1
+name: sample_suite
+base_url: ${ENV:BASE_URL}
+variables:
+  user_id: 42
+cases:
+  - name: get_user
+    method: GET
+    path: /users/${user_id}
+    validate:
+      - eq: [status_code, 200]

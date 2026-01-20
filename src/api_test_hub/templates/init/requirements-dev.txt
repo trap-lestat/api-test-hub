@@ -1,0 +1,5 @@
+pytest
+allure-pytest
+black
+isort
+flake8
