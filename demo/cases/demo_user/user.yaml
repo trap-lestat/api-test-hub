@@ -1,0 +1,22 @@
+version: 1
+epic: bench_hub后台管理系统
+feature: 用户管理
+story: 用户信息管理
+severity: critical
+cases:
+  - name: 获取用户信息
+    case_id: get_user-001
+    method: GET
+    path: /api/v1/users
+    params:
+      page: 1
+      page_size: 10
+    validate:
+      - eq: [status_code, 200]
+      - eq: [body.code, 0]
+      - eq: [body.message, "ok"]
+      - eq: ["body.data.items[0].username", "${user_name}"]
+
+
+
+  

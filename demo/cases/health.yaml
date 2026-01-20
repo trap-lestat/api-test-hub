@@ -1,0 +1,16 @@
+version: 1
+
+epic: bench_hub后台管理系统
+feature: 健康检查
+story: 健康检查
+severity: critical
+cases:
+  - name: 健康检查
+    case_id: health_check-001
+    method: GET
+    path: /health
+    validate:
+      - eq: [status_code, 200]
+      - eq: [body.code, 0]
+      - eq: [body.message, "ok"]
+  

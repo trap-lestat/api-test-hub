@@ -31,14 +31,17 @@ optional arguments:
 ## `python -m api_test_hub run --help`
 
 ```text
-usage: api-test-hub run [-h] -c CONFIG [--log-dir LOG_DIR] [--timeout TIMEOUT]
-                        [--no-allure] [--allure-results ALLURE_RESULTS]
+usage: api-test-hub run [-h] (-c CONFIG | -p PROJECT) [--log-dir LOG_DIR]
+                        [--timeout TIMEOUT] [--no-allure]
+                        [--allure-results ALLURE_RESULTS]
                         [--allure-report ALLURE_REPORT]
 
 optional arguments:
   -h, --help            show this help message and exit
   -c CONFIG, --config CONFIG
                         Config file path
+  -p PROJECT, --project PROJECT
+                        Project directory
   --log-dir LOG_DIR     Log directory path
   --timeout TIMEOUT     Request timeout
   --no-allure           Run directly without generating Allure results/report

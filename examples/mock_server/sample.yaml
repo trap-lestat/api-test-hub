@@ -1,6 +1,16 @@
 version: 1
 name: mock_suite
 base_url: ${ENV:MOCK_BASE_URL}
+auth:
+  type: bearer
+  token: ${access_token}
+  login:
+    method: POST
+    path: /submit
+    json:
+      token: demo-token
+    extract:
+      access_token: body.received.token
 cases:
   - name: get_user
     method: GET

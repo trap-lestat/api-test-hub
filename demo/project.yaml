@@ -1,0 +1,22 @@
+version: 1
+name: demo
+base_url: http://localhost:8080
+cases_dir: cases
+auth:
+  type: bearer
+  token: ${access_token}
+  login:
+    method: POST
+    path: /api/v1/auth/login
+    json:
+      username: admin
+      password: admin123
+    validate:
+      - eq: [status_code, 200]
+      - eq: [body.code, 0]
+    extract:
+      access_token: body.data.access_token
+      refresh_token: body.data.refresh_token
+      user_id: body.data.user.id
+      user_name: body.data.user.username
+      

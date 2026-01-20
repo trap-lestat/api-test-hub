@@ -3,6 +3,18 @@ name: user_api
 base_url: http://localhost:8080
 variables:
   user_id: 42
+auth:
+  type: cookie
+  cookies:
+    session_id: demo-session
+  login:
+    method: POST
+    path: /login
+    json:
+      username: demo
+      password: secret
+    extract:
+      session_id: body.session_id
 cases:
   - name: health_check
     method: GET

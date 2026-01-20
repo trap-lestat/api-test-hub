@@ -1,0 +1,16 @@
+version: 1
+name: demo_project
+base_url: http://127.0.0.1:8000
+cases_dir: cases
+variables:
+  user_id: 42
+auth:
+  type: bearer
+  token: ${access_token}
+  login:
+    method: POST
+    path: /submit
+    json:
+      token: demo-token
+    extract:
+      access_token: body.received.token

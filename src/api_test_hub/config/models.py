@@ -9,6 +9,11 @@ class CaseConfig:
     name: str
     method: str
     path: str
+    case_id: str = ""
+    epic: str = ""
+    feature: str = ""
+    story: str = ""
+    severity: str = ""
     params: Dict[str, Any] = field(default_factory=dict)
     headers: Dict[str, Any] = field(default_factory=dict)
     json: Dict[str, Any] = field(default_factory=dict)
@@ -26,3 +31,4 @@ class APISuiteConfig:
     base_url: str
     cases: List[CaseConfig]
     variables: Dict[str, Any] = field(default_factory=dict)
+    auth: Dict[str, Any] = field(default_factory=dict)

@@ -26,6 +26,35 @@ cases:
       - contains: [body.name, "lei"]
 ```
 
+## 2.1 项目级配置结构（示例）
+```yaml
+version: 1
+name: demo_project
+base_url: http://127.0.0.1:8000
+cases_dir: cases
+variables:
+  user_id: 42
+auth:
+  type: bearer
+  token: ${access_token}
+  login:
+    method: POST
+    path: /login
+    json:
+      username: demo
+      password: secret
+    extract:
+      access_token: body.access_token
+```
+
+## 2.2 项目用例文件结构（示例）
+```yaml
+version: 1
+cases:
+  - name: health_check
+    method: GET
+    path: /hello
+```
 ## 3. 运行流程
 1. 读取配置与环境变量
 2. 生成测试用例集合

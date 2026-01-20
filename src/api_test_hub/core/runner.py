@@ -6,6 +6,7 @@ from typing import Any, Dict, Optional
 
 from api_test_hub.config.models import CaseConfig
 from api_test_hub.core.assertions import AssertionErrorDetail, assert_response
+from api_test_hub.core.auth import apply_auth
 from api_test_hub.core.extract import extract_values
 from api_test_hub.core.request import RequestClient, ResponseData
 from api_test_hub.utils.vars import interpolate
@@ -18,6 +19,7 @@ def run_case(
     logger: Optional[object] = None,
     variables: Optional[Dict[str, Any]] = None,
     context: Optional[Dict[str, Any]] = None,
+    auth: Optional[Dict[str, Any]] = None,
 ) -> ResponseData:
     runtime_vars: Dict[str, Any] = {}
     if variables:
@@ -25,8 +27,10 @@ def run_case(
     if context:
         runtime_vars.update(context)
 
-    runtime_base_url = str(interpolate(base_url, runtime_vars))
-    runtime_case = _interpolate_case(case, runtime_vars)
+    runtime_base_url = str(interpolate(base_url, runtime_vars, context=context))
+    runtime_case = _interpolate_case(case, runtime_vars, context)
+    runtime_auth = interpolate(auth or {}, runtime_vars, allow_missing=True, context=context)
+    runtime_case = apply_auth(runtime_case, runtime_auth)
 
     client = RequestClient(runtime_base_url, timeout=timeout)
     attempts = max(case.retries + 1, 1)
@@ -87,16 +91,18 @@ def run_case(
     )
 
 
-def _interpolate_case(case: CaseConfig, variables: Dict[str, Any]) -> CaseConfig:
+def _interpolate_case(
+    case: CaseConfig, variables: Dict[str, Any], context: Optional[Dict[str, Any]]
+) -> CaseConfig:
     return CaseConfig(
         name=case.name,
         method=case.method,
-        path=str(interpolate(case.path, variables)),
-        params=interpolate(case.params, variables),
-        headers=interpolate(case.headers, variables),
-        json=interpolate(case.json, variables),
-        data=interpolate(case.data, variables),
-        validate=case.validate,
+        path=str(interpolate(case.path, variables, context=context)),
+        params=interpolate(case.params, variables, context=context),
+        headers=interpolate(case.headers, variables, context=context),
+        json=interpolate(case.json, variables, context=context),
+        data=interpolate(case.data, variables, context=context),
+        validate=interpolate(case.validate, variables, allow_missing=True, context=context),
         retries=case.retries,
         retry_delay=case.retry_delay,
         extract=case.extract,

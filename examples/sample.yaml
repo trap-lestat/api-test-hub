@@ -3,12 +3,25 @@ name: sample_suite
 base_url: https://api.example.com
 variables:
   user_id: 42
+auth:
+  type: bearer
+  token: ${access_token}
+  login:
+    method: POST
+    path: /login
+    json:
+      username: demo
+      password: secret
+    extract:
+      access_token: body.access_token
 cases:
   - name: get_user
     method: GET
     path: /users/${user_id}
     params:
       verbose: true                    # GET 查询参数
+      trace_id: ${uuid()}              # 扩展方法示例（生成随机 uuid）
+      request_id: ${request_id=uuid()} # 缓存扩展方法结果，供后续用例使用
     retries: 1
     retry_delay: 0.2
     extract:

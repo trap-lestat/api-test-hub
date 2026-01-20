@@ -173,8 +173,53 @@ def _value_in(actual: Any, expected: Any) -> bool | None:
 def _get_nested_value(data: Any, path: str) -> Any:
     current = data
     for segment in path.split("."):
-        if isinstance(current, dict) and segment in current:
-            current = current[segment]
+        if segment == "" and current is not None:
+            continue
+        if isinstance(current, dict):
+            current = _resolve_dict_segment(current, segment)
+        elif isinstance(current, list):
+            current = _resolve_list_segment(current, segment)
         else:
             return None
+        if current is None:
+            return None
+    return current
+
+
+def _resolve_dict_segment(current: dict, segment: str) -> Any:
+    if segment in current and "[" not in segment:
+        return current[segment]
+    return _resolve_indexed_segment(current, segment)
+
+
+def _resolve_list_segment(current: list, segment: str) -> Any:
+    if segment.isdigit():
+        index = int(segment)
+        return current[index] if 0 <= index < len(current) else None
+    return _resolve_indexed_segment(current, segment)
+
+
+def _resolve_indexed_segment(current: Any, segment: str) -> Any:
+    name = ""
+    remaining = segment
+    if "[" in segment:
+        name = segment.split("[", 1)[0]
+        remaining = segment[len(name) :]
+    if name:
+        if isinstance(current, dict) and name in current:
+            current = current[name]
+        else:
+            return None
+    while remaining.startswith("["):
+        end = remaining.find("]")
+        if end == -1:
+            return None
+        index_str = remaining[1:end]
+        if not index_str.isdigit():
+            return None
+        index = int(index_str)
+        if not isinstance(current, list) or index >= len(current):
+            return None
+        current = current[index]
+        remaining = remaining[end + 1 :]
     return current

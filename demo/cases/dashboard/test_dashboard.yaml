@@ -1,0 +1,14 @@
+version: 1
+epic: bench_hub后台管理系统
+feature: 仪表盘管理
+story: 仪表盘管理
+severity: critical
+cases:
+  - name: 获取仪表盘信息
+    case_id: dashboard_summary-001
+    method: GET
+    path: /api/v1/dashboard/summary
+    validate:
+      - eq: [status_code, 200]
+      - eq: [body.code, 0]
+      - eq: [body.message, "ok"]

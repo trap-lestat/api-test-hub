@@ -32,6 +32,7 @@ def load_config(path: str | Path) -> APISuiteConfig:
         base_url=str(interpolated["base_url"]),
         cases=cases,
         variables=variables,
+        auth=_ensure_dict(interpolated.get("auth")),
     )
 
 
@@ -86,6 +87,11 @@ def _build_case(case: Dict[str, Any]) -> CaseConfig:
         name=str(case["name"]),
         method=method,
         path=str(case["path"]),
+        case_id=str(case.get("case_id", "")),
+        epic=str(case.get("epic", "")),
+        feature=str(case.get("feature", "")),
+        story=str(case.get("story", "")),
+        severity=str(case.get("severity", "")),
         params=_ensure_dict(case.get("params")),
         headers=_ensure_dict(case.get("headers")),
         json=_ensure_dict(case.get("json")),

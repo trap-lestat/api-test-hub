@@ -49,6 +49,38 @@ cases:
         stop_mock_server(server)
 
 
+def test_cli_run_project(tmp_path) -> None:
+    base_url, server = start_mock_server()
+    try:
+        project_dir = tmp_path / "project"
+        cases_dir = project_dir / "cases"
+        cases_dir.mkdir(parents=True)
+        project_dir.joinpath("project.yaml").write_text(
+            f"""
+version: 1
+name: demo_project
+base_url: {base_url}
+cases_dir: cases
+""".strip(),
+            encoding="utf-8",
+        )
+        cases_dir.joinpath("health.yaml").write_text(
+            """
+version: 1
+cases:
+  - name: health
+    method: GET
+    path: /hello
+""".strip(),
+            encoding="utf-8",
+        )
+
+        exit_code = main(["run", "-p", str(project_dir), "--no-allure"])
+        assert exit_code == 0
+    finally:
+        stop_mock_server(server)
+
+
 def test_cli_init(tmp_path) -> None:
     target_dir = tmp_path / "template"
 

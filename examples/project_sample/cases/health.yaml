@@ -1,0 +1,7 @@
+version: 1
+cases:
+  - name: health_check
+    method: GET
+    path: /hello
+    validate:
+      - eq: [status_code, 200]

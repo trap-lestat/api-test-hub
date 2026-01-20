@@ -15,6 +15,16 @@ def test_extract_and_cache(http_server: Tuple[str, HTTPServer], tmp_path) -> Non
         version: 1
         name: demo
         base_url: {base_url}
+        auth:
+          login:
+            method: POST
+            path: /submit
+            json:
+              token: abc
+            validate:
+              - eq: [status_code, 201]
+            extract:
+              access_token: body.received.token
         cases:
           - name: get_user
             method: GET
@@ -36,9 +46,24 @@ def test_extract_and_cache(http_server: Tuple[str, HTTPServer], tmp_path) -> Non
     config, _params = load_cases(str(config_path))
 
     context = {}
-    run_case(config.base_url, config.cases[0], context=context)
+    from api_test_hub.core.auth import perform_login
+
+    perform_login(base_url, config.auth, config.variables, context)
+    run_case(
+        config.base_url,
+        config.cases[0],
+        context=context,
+        variables=config.variables,
+        auth=config.auth,
+    )
 
     assert context["user_id"] == 7
     assert isinstance(context["full_body"], dict)
 
-    run_case(config.base_url, config.cases[1], context=context)
+    run_case(
+        config.base_url,
+        config.cases[1],
+        context=context,
+        variables=config.variables,
+        auth=config.auth,
+    )

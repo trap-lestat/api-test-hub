@@ -49,4 +49,10 @@ def test_run_case_from_config(http_server: Tuple[str, HTTPServer], tmp_path) -> 
 
     context = {}
     for case in config.cases:
-        run_case(config.base_url, case, context=context, variables=config.variables)
+        run_case(
+            config.base_url,
+            case,
+            context=context,
+            variables=config.variables,
+            auth=config.auth,
+        )

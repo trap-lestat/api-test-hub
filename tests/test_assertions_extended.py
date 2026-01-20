@@ -34,6 +34,7 @@ def test_extended_assertions_success() -> None:
             {"not_in": ["body.tags", "gamma"]},
             {"exists": ["body.id"]},
             {"regex": ["body.name", "^l.*"]},
+            {"eq": ["body.tags[0]", "alpha"]},
         ],
     )
 
